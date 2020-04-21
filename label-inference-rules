@@ -16,6 +16,8 @@ PREFIX nhs-ccg-2: <https://files.digital.nhs.uk/1F/5113E1/111%20Online%20Covid-1
 PREFIX nhs-ward: <https://github.com/britishredcrosssociety/covid-19-vulnerability/raw/master/data/ward_nearest_hospitals.csv#> 
 PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&range=A1:H16&sheet=CDC_Nigeria#> 
 PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#Combined_Key>
+PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#Country_Region>
+
 
 
 
@@ -36,6 +38,7 @@ INSERT INTO GRAPH <virtrdf-label>
   nhs-ward:WD19CD rdfs:subPropertyOf  virtrdf:label  .
   nigeria-cdc:States_Affected rdfs:subPropertyOf  virtrdf:label  .
   johns-hopkins-daily: rdfs:subPropertyOf  virtrdf:label  .
+  johns-hopkins-fips-lookup: rdfs:subPropertyOf virtrdf:label  .   
 } ;
 
 rdfs_rule_set ('virtrdf-label', 'virtrdf-label');
@@ -56,6 +59,7 @@ PREFIX nhs-ccg-2: <https://files.digital.nhs.uk/1F/5113E1/111%20Online%20Covid-1
 PREFIX nhs-ward: <https://github.com/britishredcrosssociety/covid-19-vulnerability/raw/master/data/ward_nearest_hospitals.csv#> 
 PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&range=A1:H16&sheet=CDC_Nigeria#> 
 PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#Combined_Key>
+PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#Country_Region>
 
 
 
@@ -75,6 +79,7 @@ INSERT INTO GRAPH <facets>
     nhs-ward:WD19CD rdfs:subPropertyOf  virtrdf:label  .
     nigeria-cdc:States_Affected rdfs:subPropertyOf  virtrdf:label  .
     johns-hopkins-daily: rdfs:subPropertyOf  virtrdf:label  .
+    johns-hopkins-fips-lookup: rdfs:subPropertyOf virtrdf:label.
   } ;
 
 --Making the rule from theGRAPH:
@@ -105,6 +110,7 @@ PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDK
 PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#>
 PREFIX johhs-hopkins-daily-reports: <urn:johns-hopkins:covid19:daily:reports#> 
 PREFIX nextstrain-metadata-tsv: <https://github.com/nextstrain/ncov/raw/master/data/metadata.tsv#> 
+PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#>
 
 INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes> 
 
@@ -146,4 +152,14 @@ INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes>
     nextstrain-metadata-tsv:class  skos:prefLabel  "Nextstrain Specimen Submission Category (Class)" ;
                                    rdfs:comment """Categorization of COVID-19 Specimen Submissions to Nextstrain""" .  
     nextstrain-metadata-tsv:ontology  skos:prefLabel  "Definition of terms used describe COVID-19 Specimen Submissions to Nextstrain" .
+
+    johns-hopkins-fips-lookup:ontology skos:prefLabel  "Johns Hopkins FIPS and Regions Ontology"  ;
+                               rdfs:comment """Definition of terms used to define FIPS and Region data""" . 
+
+    johns-hopkins-fips-lookup:class     skos:prefLabel  "Johns Hopkins FIPS and Region Data Collection"  ;
+                                  rdfs:comment """Categorization of FIPS Codes and Regions for Johns Hopkins Daily""" .    
+
+    johns-hopkins-fips-lookup:dbpedia_state_id    skos:prefLabel  "DBpedia State ID" .  
+    johns-hopkins-fips-lookup:dbpedia_county_id   skos:prefLabel  "DBpedia County ID" .           
+    johns-hopkins-fips-lookup:dbpedia_country_id  skos:prefLabel  "DBpedia Country ID" .
   } ;
