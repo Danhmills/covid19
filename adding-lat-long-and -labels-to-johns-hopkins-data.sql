@@ -242,8 +242,8 @@ WHERE
                 {  
                         ?s1  <urn:johns-hopkins:covid19:daily:reports#Country_Region>  ?s4 . 
                         BIND (IRI(CONCAT('http://dbpedia.org/resource/',REPLACE(?s4," ","_"))) as ?countryURI)
-                        BIND (IRI(CONCAT('https://bing.com/covid/local/',LCASE(?s4),'#')) as ?bingCountryURI)
-                        BIND (IRI(CONCAT('https://bing.com/covid/local/',LCASE(?s4))) as ?bingCountryURL)
+                        BIND (IRI(CONCAT('https://bing.com/covid/local/',LCASE(REPLACE(?s4,"-","")),'#')) as ?bingCountryURI)
+                        BIND (IRI(CONCAT('https://bing.com/covid/local/',LCASE(REPLACE(?s4,"-","")))) as ?bingCountryURL)
                 }
         }  ;
 
