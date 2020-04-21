@@ -110,6 +110,7 @@ PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDK
 PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#>
 PREFIX johhs-hopkins-daily-reports: <urn:johns-hopkins:covid19:daily:reports#> 
 PREFIX nextstrain-metadata-tsv: <https://github.com/nextstrain/ncov/raw/master/data/metadata.tsv#> 
+PREFIX johns-hopkins-fips-lookup-csv: <urn:johns-hopkins:covid19:fips:lookup#>
 PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#>
 
 INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes> 
@@ -152,6 +153,8 @@ INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes>
     nextstrain-metadata-tsv:class  skos:prefLabel  "Nextstrain Specimen Submission Category (Class)" ;
                                    rdfs:comment """Categorization of COVID-19 Specimen Submissions to Nextstrain""" .  
     nextstrain-metadata-tsv:ontology  skos:prefLabel  "Definition of terms used describe COVID-19 Specimen Submissions to Nextstrain" .
+
+    johns-hopkins-fips-lookup-csv: skos:prefLabel "Johns Hopkins FIPS and Redion Lookup (CSV)".
 
     johns-hopkins-fips-lookup:ontology skos:prefLabel  "Johns Hopkins FIPS and Regions Ontology"  ;
                                rdfs:comment """Definition of terms used to define FIPS and Region data""" . 
