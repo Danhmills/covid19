@@ -17,10 +17,8 @@ PREFIX nhs-ward: <https://github.com/britishredcrosssociety/covid-19-vulnerabili
 PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&range=A1:H16&sheet=CDC_Nigeria#> 
 PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#Combined_Key>
 PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#Country_Region>
-
-
-
-
+PREFIX owid-daily-reports: <urn:ourworldindata:covid19:ecdc:data:full#>
+PREFIX covidtracking-daily-reports: <urn:covidtracking:crawl:data#> 
 
 INSERT INTO GRAPH <virtrdf-label> 
 
@@ -60,7 +58,8 @@ PREFIX nhs-ward: <https://github.com/britishredcrosssociety/covid-19-vulnerabili
 PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&range=A1:H16&sheet=CDC_Nigeria#> 
 PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#Combined_Key>
 PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#Country_Region>
-
+PREFIX owid-daily-reports: <urn:ourworldindata:covid19:ecdc:data:full#>
+PREFIX covidtracking-daily-reports: <urn:covidtracking:crawl:data#> 
 
 
 INSERT INTO GRAPH <facets> 
@@ -110,8 +109,10 @@ PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDK
 PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#>
 PREFIX johhs-hopkins-daily-reports: <urn:johns-hopkins:covid19:daily:reports#> 
 PREFIX nextstrain-metadata-tsv: <https://github.com/nextstrain/ncov/raw/master/data/metadata.tsv#> 
-PREFIX johns-hopkins-fips-lookup-csv: <urn:johns-hopkins:covid19:fips:lookup#>
+PREFIX johns-hopkins-fips-lookup-csv: <urn:johns-hopkins:covid19:fips:lookup>
 PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#>
+PREFIX owid-daily-reports: <urn:ourworldindata:covid19:ecdc:data:full#> 
+PREFIX covidtracking-daily-reports: <urn:covidtracking:crawl:data#> 
 
 INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes> 
 
@@ -165,4 +166,51 @@ INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes>
     johns-hopkins-fips-lookup:dbpedia_state_id    skos:prefLabel  "DBpedia State ID" .  
     johns-hopkins-fips-lookup:dbpedia_county_id   skos:prefLabel  "DBpedia County ID" .           
     johns-hopkins-fips-lookup:dbpedia_country_id  skos:prefLabel  "DBpedia Country ID" .
+    johns-hopkins-fips-lookup:Province_State  skos:prefLabel  "Province" .
+
+
+
+    owid-daily-reports:ontology skos:prefLabel  "Our World In Data COVID-19 Data Ontology"  ;
+                               rdfs:comment """Definition of terms used to define OWID terms""" . 
+
+    owid-daily-reports:class     skos:prefLabel  "Our World In Data (OWID) Data Collection"  ;
+                                  rdfs:comment """Categorization of OWID COVID-19 reports by country""" .  
+
+    owid-daily-reports:date skos:prefLabel "Date".
+    owid-daily-reports:location skos:prefLabel "Location".
+    owid-daily-reports:new_cases skos:prefLabel "New Cases".
+    owid-daily-reports:new_deaths skos:prefLabel "New Deaths".
+    owid-daily-reports:total_cases skos:prefLabel "Total Cases".
+    owid-daily-reports:total_deaths skos:prefLabel "Total Deaths".
+    owid-daily-reports:dbpedia_country_id skos:prefLabel "DBpedia Country ID".
+
+    covidtracking-daily-reports:ontology skos:prefLabel  "Covidtracking COVID-19 Data Ontology"  ;
+                               rdfs:comment """Definition of terms used to define OWID terms""" . 
+
+    covidtracking-daily-reports:class     skos:prefLabel  "Covidtracking Data Collection"  ;
+                                  rdfs:comment """Categorization of OWID COVID-19 reports by country""" .  
+
+    covidtracking-daily-reports:dbpedia_country_id skos:prefLabel "DBPedia Country ID".
+    covidtracking-daily-reports:dbpedia_state_id skos:prefLabel "DBPedia State ID".
+    covidtracking-daily-reports:date skos:prefLabel "Date".
+    covidtracking-daily-reports:state skos:prefLabel "State / Region".
+    covidtracking-daily-reports:positive skos:prefLabel "Positive".
+    covidtracking-daily-reports:negative skos:prefLabel "Negative".
+    covidtracking-daily-reports:recoversed skos:prefLabel "Recovered".
+    covidtracking-daily-reports:hash skos:prefLabel "Hash".
+    covidtracking-daily-reports:dateChecked skos:prefLabel "Date Checked".
+    covidtracking-daily-reports:total skos:prefLabel "Total".
+    covidtracking-daily-reports:totalTestResults skos:prefLabel "Total Test Results".
+    covidtracking-daily-reports:posNeg skos:prefLabel "Positive Negatives".
+    covidtracking-daily-reports:fips skos:prefLabel "FIPS".
+    covidtracking-daily-reports:deathIncrease skos:prefLabel "Death Increase".
+    covidtracking-daily-reports:hospitalizedIncrease skos:prefLabel "Hospitalization Increase".
+    covidtracking-daily-reports:negativeIncrease skos:prefLabel "Negative Increase".
+    covidtracking-daily-reports:positiveIncrease skos:prefLabel "Positive Increase".
+    covidtracking-daily-reports:totalTestResultsIncrease skos:prefLabel "Test Results Increase".
+    covidtracking-daily-reports:inIcuCumulative skos:prefLabel "In ICU (Cumulative)".
+    covidtracking-daily-reports:onVentilatorCumulative skos:prefLabel "On Ventilator (Cumulative)".
+
+
+
   } ;
