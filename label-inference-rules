@@ -210,6 +210,8 @@ INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes>
     covidtracking-daily-reports:totalTestResultsIncrease skos:prefLabel "Test Results Increase".
     covidtracking-daily-reports:inIcuCumulative skos:prefLabel "In ICU (Cumulative)".
     covidtracking-daily-reports:onVentilatorCumulative skos:prefLabel "On Ventilator (Cumulative)".
+    covidtracking-daily-reports:hospitalizedCumulative skos:prefLabel "Hospitalized (Cumulative)".
+
 
 
 

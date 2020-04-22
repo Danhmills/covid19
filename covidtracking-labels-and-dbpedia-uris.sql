@@ -1,216 +1,147 @@
--- Aesthetic Rules for /about and /describe services where an annotation property
--- is designated at the preferred entity label
+    LOG_ENABLE (2, 1); 
 
-SPARQL
+    
+    -- Pref Label Cleanup
+    -- Countries and States
 
-PREFIX nextstrain-sheet-csv: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=nextstrain_csv#> 
-PREFIX nextstrain-sheet: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=nextstrain#>
-PREFIX worldometer: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=worldometers&range=A3:K168#>
-PREFIX consolidated: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=Consolidated#>
-PREFIX nextstrain-metadata-tsv: <https://github.com/nextstrain/ncov/raw/master/data/metadata.tsv#> 
-PREFIX wikipedia: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=Wikipedia_Testing_By_Country#>
-PREFIX kff:       <https://www.kff.org/wp-content/uploads/2020/03/overall_clean-csv-for-map.csv#> 
-PREFIX pomucky-csv: <https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/pomucky.csv#> 
-PREFIX nhs-ccg: <https://files.digital.nhs.uk/D6/BAA97E/NHS%20Pathways%20Covid-19%20data%202020-04-01.csv#>
-PREFIX nhs-ccg-2: <https://files.digital.nhs.uk/1F/5113E1/111%20Online%20Covid-19%20data_2020-04-01.csv#> 
-PREFIX nhs-ward: <https://github.com/britishredcrosssociety/covid-19-vulnerability/raw/master/data/ward_nearest_hospitals.csv#> 
-PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&range=A1:H16&sheet=CDC_Nigeria#> 
-PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#Combined_Key>
-PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#Country_Region>
-PREFIX owid-daily-reports: <urn:ourworldindata:covid19:ecdc:data:full#>
-PREFIX covidtracking-daily-reports: <urn:covidtracking:crawl:data#> 
+    SPARQL
+    CLEAR GRAPH <urn:covidtracking:crawl:data:labels>  ;
 
-INSERT INTO GRAPH <virtrdf-label> 
+    SPARQL
 
-{
-  nextstrain-sheet-csv:strain rdfs:subPropertyOf  virtrdf:label  .
-  nextstrain-sheet:strain rdfs:subPropertyOf  virtrdf:label  .
-  worldometer:Country__Other rdfs:subPropertyOf  virtrdf:label  .
-  consolidated:location rdfs:subPropertyOf  virtrdf:label  .
-  nextstrain-metadata-tsv:strain rdfs:subPropertyOf  virtrdf:label  .
-  wikipedia:Country_or_region rdfs:subPropertyOf  virtrdf:label  .
-  kff:State rdfs:subPropertyOf  virtrdf:label  .
-  pomucky-csv:kraj rdfs:subPropertyOf  virtrdf:label  .
-  nhs-ccg:CCGName rdfs:subPropertyOf  virtrdf:label  .
-  nhs-ccg-2:ccgname rdfs:subPropertyOf  virtrdf:label  .
-  nhs-ward:WD19CD rdfs:subPropertyOf  virtrdf:label  .
-  nigeria-cdc:States_Affected rdfs:subPropertyOf  virtrdf:label  .
-  johns-hopkins-daily: rdfs:subPropertyOf  virtrdf:label  .
-  johns-hopkins-fips-lookup: rdfs:subPropertyOf virtrdf:label  .   
-} ;
+    PREFIX : <urn:covidtracking:crawl:data#> 
 
-rdfs_rule_set ('virtrdf-label', 'virtrdf-label');
-p_score_init ();
+    INSERT 
+            {  
+                    GRAPH <urn:covidtracking:crawl:data:labels> 
+                            {
+                             ?href skos:prefLabel ?prefLabel
+                            }
+            }
+    WHERE
+            {
+                    SELECT 
+                        ?s1 as ?href 
+                        CONCAT(?province,' as of ',xsd:string(?date)) as ?prefLabel
+                            
+                    FROM <urn:covidtracking:crawl:data>
+                    WHERE 
+                            {
+                                ?s1  :fips ?fips;
+                                     :dateChecked ?date.
 
-SPARQL
+                                GRAPH <urn:johns-hopkins:covid19:fips:lookup> 
+                                    {
+                                        ?s2 <urn:johns-hopkins:covid19:fips:lookup#FIPS> ?fips; 
+                                            <urn:johns-hopkins:covid19:fips:lookup#Province_State> ?province.
+                                        BIND(CONCAT("http://dbpedia.org/resource/",?province) as ?state)
+                                    }
 
-PREFIX nextstrain-sheet-csv: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=nextstrain_csv#> 
-PREFIX nextstrain-sheet: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=nextstrain#>
-PREFIX worldometer: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=worldometers&range=A3:K168#>
-PREFIX consolidated: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=Consolidated#>
-PREFIX nextstrain-metadata-tsv: <https://github.com/nextstrain/ncov/raw/master/data/metadata.tsv#> 
-PREFIX wikipedia: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&sheet=Wikipedia_Testing_By_Country#>
-PREFIX kff:       <https://www.kff.org/wp-content/uploads/2020/03/overall_clean-csv-for-map.csv#> 
-PREFIX pomucky-csv: <https://onemocneni-aktualne.mzcr.cz/api/v1/covid-19/pomucky.csv#> 
-PREFIX nhs-ccg: <https://files.digital.nhs.uk/D6/BAA97E/NHS%20Pathways%20Covid-19%20data%202020-04-01.csv#>
-PREFIX nhs-ccg-2: <https://files.digital.nhs.uk/1F/5113E1/111%20Online%20Covid-19%20data_2020-04-01.csv#> 
-PREFIX nhs-ward: <https://github.com/britishredcrosssociety/covid-19-vulnerability/raw/master/data/ward_nearest_hospitals.csv#> 
-PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&range=A1:H16&sheet=CDC_Nigeria#> 
-PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#Combined_Key>
-PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#Country_Region>
-PREFIX owid-daily-reports: <urn:ourworldindata:covid19:ecdc:data:full#>
-PREFIX covidtracking-daily-reports: <urn:covidtracking:crawl:data#> 
+                            }
+            };            
 
 
-INSERT INTO GRAPH <facets> 
+    -- Deletion
 
-  {
-    nextstrain-sheet-csv:strain rdfs:subPropertyOf  virtrdf:label  .
-    nextstrain-sheet:strain rdfs:subPropertyOf  virtrdf:label  .
-    worldometer:Country__Other rdfs:subPropertyOf  virtrdf:label  .
-    consolidated:location rdfs:subPropertyOf  virtrdf:label  .
-    nextstrain-metadata-tsv:strain rdfs:subPropertyOf  virtrdf:label  .
-    wikipedia:Country_or_region rdfs:subPropertyOf  virtrdf:label  .
-    kff:State rdfs:subPropertyOf  virtrdf:label  .
-    pomucky-csv:kraj rdfs:subPropertyOf  virtrdf:label  .
-    nhs-ccg:CCGName rdfs:subPropertyOf  virtrdf:label  .
-    nhs-ccg-2:ccgname rdfs:subPropertyOf  virtrdf:label  .
-    nhs-ward:WD19CD rdfs:subPropertyOf  virtrdf:label  .
-    nigeria-cdc:States_Affected rdfs:subPropertyOf  virtrdf:label  .
-    johns-hopkins-daily: rdfs:subPropertyOf  virtrdf:label  .
-    johns-hopkins-fips-lookup: rdfs:subPropertyOf virtrdf:label.
-  } ;
+    SPARQL
 
---Making the rule from theGRAPH:
-rdfs_rule_set ('facets', 'facets');
+    PREFIX : <urn:covidtracking:crawl:data#> 
 
--- extend to other rules e.g. facet using virtrdf-label rule.
+    DELETE
+            {  
+                    GRAPH <urn:covidtracking:crawl:data:mapping>  
+                            {
+                            ?s1 :dbpedia_country_id ?oldCountryURI .
+                            }
+            }
+    WHERE
+    {
+    GRAPH <urn:covidtracking:crawl:data:mapping>
+            {  
+                    ?s1 :dbpedia_country_id ?oldCountryURI.
+            }
+    }  ; 
 
-rdfs_rule_set ('facets', 'virtrdf-label');
+    
 
--- verify rule existence
+    -- DBpedia Country, State
 
-SELECT rs_name FROM sys_rdf_schema
-WHERE rs_name = 'facets' OR rs_name = 'virtrdf-label' ;
+    SPARQL
 
--- Ontology Label Fixes from CSV Transformations
+    PREFIX : <urn:covidtracking:crawl:data#> 
 
-SPARQL
-CLEAR GRAPH <urn:kidehen:covid19:label:fixes>  ;
+    INSERT 
+            {  
+                    GRAPH <urn:covidtracking:crawl:data:mapping>  
+                            {
+                            ?href :dbpedia_state_id ?stateURI ;
+                            :dbpedia_country_id ?countryURI .
+                            }
+            }
+    WHERE
+            {
+                    SELECT 
+                        ?s1 as ?href 
+                        CONCAT(?province,' as of ',xsd:string(?date)) as ?prefLabel
+                        ?stateURI
+                        ?countryURI
+                            
+                    FROM <urn:covidtracking:crawl:data>
+                    WHERE 
+                            {
+                                ?s1  :fips ?fips;
+                                     :dateChecked ?date.
 
-SPARQL
+                                GRAPH <urn:johns-hopkins:covid19:fips:lookup> 
+                                    {
+                                        ?s2 <urn:johns-hopkins:covid19:fips:lookup#FIPS> ?fips; 
+                                            <urn:johns-hopkins:covid19:fips:lookup#Province_State> ?province.
+                                        BIND(IRI(CONCAT("http://dbpedia.org/resource/",REPLACE(?province," ","_"))) AS ?stateURI)
+                                    }
+                                        BIND(IRI("http://dbpedia.org/resource/United_States") AS ?countryURI)
+                            }
+            };     
 
-PREFIX nhs-covid-tracing: <https://files.digital.nhs.uk/D6/BAA97E/NHS%20Pathways%20Covid-19%20data%202020-04-01.csv#>
-PREFIX nhs-covid-tracing-doc: <https://linkeddata.uriburner.com/about/id/https/files.digital.nhs.uk/D6/BAA97E/NHS%20Pathways%20Covid-19%20data%202020-04-01.>
-PREFIX nhs-covid-tracing-2: <https://files.digital.nhs.uk/1F/5113E1/111%20Online%20Covid-19%20data_2020-04-01.csv#>
-PREFIX nhs-covid-tracing-doc-2: <https://linkeddata.uriburner.com/about/id/https/files.digital.nhs.uk/1F/5113E1/111%20Online%20Covid-19%20data_2020-04-01.>
-PREFIX nhs-ward: <https://github.com/britishredcrosssociety/covid-19-vulnerability/raw/master/data/ward_nearest_hospitals.csv#> 
-PREFIX nigeria-cdc: <https://docs.google.com/spreadsheets/d/1Z0csxYkWFuvNpfaGQDKnhqdREHcwYbvd3s7vHsWsT5Q/gviz/tq?tqx=out:csv&range=A1:H16&sheet=CDC_Nigeria#> 
-PREFIX johns-hopkins-daily: <urn:johns-hopkins:covid19:daily:reports#>
-PREFIX johhs-hopkins-daily-reports: <urn:johns-hopkins:covid19:daily:reports#> 
-PREFIX nextstrain-metadata-tsv: <https://github.com/nextstrain/ncov/raw/master/data/metadata.tsv#> 
-PREFIX johns-hopkins-fips-lookup-csv: <urn:johns-hopkins:covid19:fips:lookup>
-PREFIX johns-hopkins-fips-lookup: <urn:johns-hopkins:covid19:fips:lookup#>
-PREFIX owid-daily-reports: <urn:ourworldindata:covid19:ecdc:data:full#> 
-PREFIX covidtracking-daily-reports: <urn:covidtracking:crawl:data#> 
+    
 
-INSERT INTO GRAPH <urn:kidehen:covid19:label:fixes> 
+    
 
-  {
-    nhs-covid-tracing:ontology skos:prefLabel  "UK NHS COVID-19 Pathways Ontology"  ;
-                               rdfs:comment """Definition of terms used to define COVID-19 Disease Tracking, across annonymized subjects""" . 
-    nhs-covid-tracing:class skos:prefLabel  "Disease Tracking Collection"  ;
-                               rdfs:comment """Class to which disease tracking events belong""" . 
-    nhs-covid-tracing-doc:csv  skos:prefLabel  "NHS Disease Tracking Collection Document"  ;
-                               rdfs:comment """RDF sentence collection generated from CSV documents about COVID19 
-                                               Disease Tracking by the UK NHS""" . 
-    nhs-covid-tracing-2:ontology skos:prefLabel  "UK NHS COVID-19 Disease Spread Potential Ontology"  ;
-                               rdfs:comment """Definition of terms used to define COVID-19 Disease Spread potential, across annonymized subjects""" . 
-    nhs-covid-tracing-2:class skos:prefLabel  "Disease Spread Potential Tracking Collection"  ;
-                               rdfs:comment """Class of events for tracking disease spread potential""" .   
-    nhs-covid-tracing-doc-2:csv  skos:prefLabel  "NHS Disease Spread Potential Tracking Collection Document"  ;
-                               rdfs:comment """RDF sentence collection generated from CSV documents about COVID19 
-                                               Disease Spread Potential Tracking by the UK NHS""" .        
+    -- Bing URI for United States
 
-    nigeria-cdc:ontology skos:prefLabel  "Nigeria CDC COVID-19 Data Ontology"  ;
-                               rdfs:comment """Definition of terms used to define Nigeria CDC COVID-19 Data""" . 
-    nigeria-cdc:class skos:prefLabel  "Nigeria CDC State Data Collection"  ;
-                               rdfs:comment """Categorization of Data for a given State""" .   
-    nigeria-cdc:csv  skos:prefLabel  "About CDC Nigeria COVID-19 Data by State"  ;
-                               rdfs:comment """RDF sentence collection generated from CSV documents about Nigeria CDC COVID-19 Data by State.""" .  
+    SPARQL
 
-    johns-hopkins-daily:ontology  skos:prefLabel  "Johns Hopkins Daily COVID-19 CSV Dumps Ontology"  ;
-                                  rdfs:comment """Definition of terms used to describe Johns's Hopkins Daily Data from CSV Documents.""" .       
-    johns-hopkins-daily:class     skos:prefLabel  "Johns Hopkins Daily COVID-19 CSV Data Collection"  ;
-                                  rdfs:comment """Categorization of COVID-19 Data for Johns Hopkins Daily""" .    
+    PREFIX : <urn:covidtracking:crawl:data#> 
 
-    johhs-hopkins-daily-reports:dbpedia_country_id  skos:prefLabel  "DBpedia Country ID" .
-    johhs-hopkins-daily-reports:dbpedia_state_id    skos:prefLabel  "DBpedia State ID" .  
-    johhs-hopkins-daily-reports:dbpedia_county_id   skos:prefLabel  "DBpedia County ID" .
+    INSERT INTO GRAPH <urn:dbpedia:country:state:country:fips:mapping> 
+            {  
+                    GRAPH <urn:dbpedia:country:state:country:fips:mapping>  
+                            {
+                                    ?s1 :dbpedia_country_id ?countryURI .
+                                    
+                                    ?countryURI owl:sameAs <https://bing.com/covid/local/unitedstates#> . 
+                                    <https://bing.com/covid/local/unitedstates#>  schema:url <https://bing.com/covid/local/unitedstates>  .
+                            }
+            }
+    WHERE
+            {
+                    SELECT 
+                        ?s1 as ?href 
+                        CONCAT(?province,' as of ',xsd:string(?date)) as ?prefLabel
+                        ?stateURI
+                        ?countryURI
+                            
+                    FROM <urn:covidtracking:crawl:data>
+                    WHERE 
+                            {
+                                ?s1  :fips ?fips;
+                                     :dateChecked ?date.
 
-    nextstrain-metadata-tsv:dbpedia_country_id  skos:prefLabel  "DBpedia Country ID" .
-    nextstrain-metadata-tsv:nextstrain_id  skos:prefLabel  "Nextrain URI" .
-    nextstrain-metadata-tsv:location  skos:prefLabel  "location" .
-    nextstrain-metadata-tsv:class  skos:prefLabel  "Nextstrain Specimen Submission Category (Class)" ;
-                                   rdfs:comment """Categorization of COVID-19 Specimen Submissions to Nextstrain""" .  
-    nextstrain-metadata-tsv:ontology  skos:prefLabel  "Definition of terms used describe COVID-19 Specimen Submissions to Nextstrain" .
-
-    johns-hopkins-fips-lookup-csv: skos:prefLabel "Johns Hopkins FIPS and Redion Lookup (CSV)".
-
-    johns-hopkins-fips-lookup:ontology skos:prefLabel  "Johns Hopkins FIPS and Regions Ontology"  ;
-                               rdfs:comment """Definition of terms used to define FIPS and Region data""" . 
-
-    johns-hopkins-fips-lookup:class     skos:prefLabel  "Johns Hopkins FIPS and Region Data Collection"  ;
-                                  rdfs:comment """Categorization of FIPS Codes and Regions for Johns Hopkins Daily""" .    
-
-    johns-hopkins-fips-lookup:dbpedia_state_id    skos:prefLabel  "DBpedia State ID" .  
-    johns-hopkins-fips-lookup:dbpedia_county_id   skos:prefLabel  "DBpedia County ID" .           
-    johns-hopkins-fips-lookup:dbpedia_country_id  skos:prefLabel  "DBpedia Country ID" .
-    johns-hopkins-fips-lookup:Province_State  skos:prefLabel  "Province" .
-
-
-
-    owid-daily-reports:ontology skos:prefLabel  "Our World In Data COVID-19 Data Ontology"  ;
-                               rdfs:comment """Definition of terms used to define OWID terms""" . 
-
-    owid-daily-reports:class     skos:prefLabel  "Our World In Data (OWID) Data Collection"  ;
-                                  rdfs:comment """Categorization of OWID COVID-19 reports by country""" .  
-
-    owid-daily-reports:date skos:prefLabel "Date".
-    owid-daily-reports:location skos:prefLabel "Location".
-    owid-daily-reports:new_cases skos:prefLabel "New Cases".
-    owid-daily-reports:new_deaths skos:prefLabel "New Deaths".
-    owid-daily-reports:total_cases skos:prefLabel "Total Cases".
-    owid-daily-reports:total_deaths skos:prefLabel "Total Deaths".
-    owid-daily-reports:dbpedia_country_id skos:prefLabel "DBpedia Country ID".
-
-    covidtracking-daily-reports:ontology skos:prefLabel  "Covidtracking COVID-19 Data Ontology"  ;
-                               rdfs:comment """Definition of terms used to define OWID terms""" . 
-
-    covidtracking-daily-reports:class     skos:prefLabel  "Covidtracking Data Collection"  ;
-                                  rdfs:comment """Categorization of OWID COVID-19 reports by country""" .  
-
-    covidtracking-daily-reports:dbpedia_country_id skos:prefLabel "DBPedia Country ID".
-    covidtracking-daily-reports:dbpedia_state_id skos:prefLabel "DBPedia State ID".
-    covidtracking-daily-reports:date skos:prefLabel "Date".
-    covidtracking-daily-reports:state skos:prefLabel "State / Region".
-    covidtracking-daily-reports:positive skos:prefLabel "Positive".
-    covidtracking-daily-reports:negative skos:prefLabel "Negative".
-    covidtracking-daily-reports:recoversed skos:prefLabel "Recovered".
-    covidtracking-daily-reports:hash skos:prefLabel "Hash".
-    covidtracking-daily-reports:dateChecked skos:prefLabel "Date Checked".
-    covidtracking-daily-reports:total skos:prefLabel "Total".
-    covidtracking-daily-reports:totalTestResults skos:prefLabel "Total Test Results".
-    covidtracking-daily-reports:posNeg skos:prefLabel "Positive Negatives".
-    covidtracking-daily-reports:fips skos:prefLabel "FIPS".
-    covidtracking-daily-reports:deathIncrease skos:prefLabel "Death Increase".
-    covidtracking-daily-reports:hospitalizedIncrease skos:prefLabel "Hospitalization Increase".
-    covidtracking-daily-reports:negativeIncrease skos:prefLabel "Negative Increase".
-    covidtracking-daily-reports:positiveIncrease skos:prefLabel "Positive Increase".
-    covidtracking-daily-reports:totalTestResultsIncrease skos:prefLabel "Test Results Increase".
-    covidtracking-daily-reports:inIcuCumulative skos:prefLabel "In ICU (Cumulative)".
-    covidtracking-daily-reports:onVentilatorCumulative skos:prefLabel "On Ventilator (Cumulative)".
-
-
-
-  } ;
+                                GRAPH <urn:johns-hopkins:covid19:fips:lookup> 
+                                    {
+                                        ?s2 <urn:johns-hopkins:covid19:fips:lookup#FIPS> ?fips; 
+                                            <urn:johns-hopkins:covid19:fips:lookup#Province_State> ?province.
+                                        BIND(CONCAT("http://dbpedia.org/resource/",REPLACE(?province," ","")) AS ?stateURI)
+                                    }
+                                        BIND("http://dbpedia.org/resource/United_States" AS ?countryURI)
+                            }
+            };
